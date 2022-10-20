@@ -1,6 +1,17 @@
 import React from "react";
 // import AsyncSelect from "react-select/async";
 import AsyncCreatableSelect from "react-select/async-creatable";
+import { components } from "react-select";
+
+const { Option } = components;
+const CustomOption = (props) => (
+  <Option {...props}>
+    {props.data.logo && (
+      <img src={props.data.logo} style={{ width: 36 }} alt={props.data.label} />
+    )}
+    {props.data.label}
+  </Option>
+);
 
 const SearchableDropdown = () => {
   const promiseOptions = async (inputValue) => {
@@ -12,19 +23,20 @@ const SearchableDropdown = () => {
       const companies = data.map((opt) => ({
         label: opt.name,
         value: opt.name,
+        logo: opt.logo,
       }));
-       console.log("empresas :", companies)
       return companies;
     }
   };
+
   return (
     <AsyncCreatableSelect
-      //   onChange={(opt, meta) => console.log("option", opt, "meta:", meta)}
+      onChange={(opt, meta) => console.log("option", opt, "meta:", meta)}
       cacheOptions
       defaultOptions
       isClearable={true}
       loadOptions={promiseOptions}
-      //   getOptionLabel={e => console.log(e)}
+      components={{ Option: CustomOption }}
     />
   );
 };
